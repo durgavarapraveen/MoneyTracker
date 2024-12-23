@@ -2,6 +2,7 @@ import express from "express";
 import protect from "../Middlewares/TokenMiddleWare.js";
 import {
   addExpenseController,
+  getDatesWhereDataIsPresentController,
   getExpenseAccordingToDayController,
   getExpensesController,
   getMonthlyExpensesAccordingToCategoryController,
@@ -31,6 +32,12 @@ router.post(
   "/getExpensebyCategoryYearly",
   protect,
   getYearlyExpensesAccordingToCategoryController
+);
+
+router.post(
+  "/getmontlyexpenses",
+  protect,
+  getDatesWhereDataIsPresentController
 );
 
 export default router;

@@ -6,6 +6,7 @@ dotenv.config();
 
 const protect = async (req, res, next) => {
   let token;
+  console.log("protect middleware");
 
   // Check if token is provided in Authorization header
   if (

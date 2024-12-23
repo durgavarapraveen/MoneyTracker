@@ -40,8 +40,10 @@ export const getExpensesController = async (req, res) => {
 
 //get expense according to day
 export const getExpenseAccordingToDayController = async (req, res) => {
+  console.log("getExpenseAccordingToDayController");
   try {
     const { day } = req.body;
+    console.log("day", day);
 
     if (!day) {
       return res.status(400).json({ message: "Day is required" });
@@ -164,6 +166,37 @@ export const getYearlyExpensesAccordingToCategoryController = async (
     }, {});
 
     return res.status(200).json(categoryWiseExpenses);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+// get dates where data is present in month according to selected date
+export const getDatesWhereDataIsPresentController = async (req, res) => {
+  try {
+    const { date } = req.body;
+
+    const month = new Date(date).getMonth();
+    const year = new Date(date).getFullYear();
+
+    const startOfMonth = new Date(year, month, 1);
+    const endOfMonth = new Date(year, month + 1, 0);
+
+    const expenses = await Expenses.find({
+      user: req.user._id,
+      date: {
+        $gte: startOfMonth,
+        $lt: endOfMonth,
+      },
+    });
+
+    // get dates where data is present
+    const dates = expenses.map((expense) => {
+      return new Date(expense.date).getDate();
+    });
+    console.log(dates);
+    return res.status(200).json(dates);
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal server error" });
